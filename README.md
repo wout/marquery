@@ -155,7 +155,7 @@ end
 
 #### Other frameworks
 
-For Kemal and other frameworks,
+For [Kemal](https://kemalcr.com/) and other frameworks,
 [pager](https://github.com/imdrasil/pager) is a good option:
 
 ```crystal
