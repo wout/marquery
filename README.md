@@ -126,9 +126,9 @@ query = Blog::PostQuery.new
 # Get all entries
 query.all
 
-# Find by slug
-query.find("first_post")   # raises if not found
-query.find?("first_post")  # returns nil if not found
+# Find by slug (slugs are always hyphenated)
+query.find("first-post")   # raises if not found
+query.find?("first-post")  # returns nil if not found
 
 # Navigate between entries
 query.previous(post)  # previous entry in the list, or nil
