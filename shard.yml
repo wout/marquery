@@ -1,0 +1,17 @@
+name: marquery
+version: 0.1.0
+
+authors:
+  - Wout <hi@wout.codes>
+
+crystal: ">= 1.16"
+
+license: MIT
+
+dependencies:
+  wordsmith:
+    github: luckyframework/wordsmith
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
