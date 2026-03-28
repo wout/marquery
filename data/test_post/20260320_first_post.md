@@ -2,7 +2,7 @@
 title: The very first post
 description: >-
   This is the first post.
-active: true
+active: false
 ---
 
 This is the body of the first post.

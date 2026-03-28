@@ -90,7 +90,7 @@ end
 | `description` | `String?` | `nil`   |
 | `content`     | `String`  |         |
 | `date`        | `Time`    |         |
-| `active`      | `Bool`    | `false` |
+| `active`      | `Bool`    | `true`  |
 
 Additional fields can be added to the custom model and populated through
 frontmatter.

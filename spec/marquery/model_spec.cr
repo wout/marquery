@@ -17,15 +17,15 @@ describe Marquery::Model do
     post.description.should be_nil
   end
 
-  it "defaults active to false" do
+  it "defaults active to true" do
     post = TestPostQuery.new.find("second-post")
 
-    post.active.should eq(false)
+    post.active.should eq(true)
   end
 
   it "reads active from frontmatter" do
     post = TestPostQuery.new.find("first-post")
 
-    post.active.should eq(true)
+    post.active.should eq(false)
   end
 end

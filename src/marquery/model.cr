@@ -8,7 +8,7 @@ module Marquery
       getter description : String?
       getter content : String
       getter date : Time
-      getter active : Bool = false
+      getter active : Bool = true
     end
   end
 end
