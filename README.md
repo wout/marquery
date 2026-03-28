@@ -142,7 +142,8 @@ pagination solution.
 
 #### Lucky
 
-Lucky has built-in array pagination with `paginate_array`:
+[Lucky](https://luckyframework.org) has built-in array pagination with
+`paginate_array`:
 
 ```crystal
 class Blog::Index < BrowserAction
