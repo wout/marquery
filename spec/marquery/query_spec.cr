@@ -97,18 +97,18 @@ describe "Query" do
     it "filters entries with a block" do
       posts = TestPostQuery.new.filter(&.active).all
 
-      posts.size.should eq(1)
-      posts.first.slug.should eq("first-post")
+      posts.size.should eq(2)
+      posts.map(&.slug).should_not contain("first-post")
     end
 
     it "is chainable" do
       posts = TestPostQuery.new
-        .filter { |post| post.date >= Time.local(2026, 3, 24) }
         .filter { |post| !post.active }
+        .filter { |post| post.date <= Time.local(2026, 3, 21) }
         .all
 
       posts.size.should eq(1)
-      posts.first.slug.should eq("third-post")
+      posts.first.slug.should eq("first-post")
     end
 
     it "returns self" do
