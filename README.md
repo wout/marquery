@@ -37,11 +37,9 @@ end
 This will look for markdown files in `data/blog_post/*.md`, derived from the
 class name (without the `Query` suffix). For example:
 
-| Query class          | Data directory           |
-| -------------------- | ------------------------ |
-| `Blog::PostQuery`    | `data/blog_post/*.md`    |
-| `ItemQuery`          | `data/item/*.md`         |
-| `News::ArticleQuery` | `data/news_article/*.md` |
+- `Blog::PostQuery` → `data/blog_post/*.md`
+- `ItemQuery` → `data/item/*.md`
+- `News::ArticleQuery` → `data/news_article/*.md`
 
 ### Markdown files
 
