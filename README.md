@@ -177,7 +177,7 @@ For [Kemal](https://kemalcr.com/) and other frameworks,
 require "pager/collections/array"
 
 get "/blog" do |env|
-  curent_page = env.params.query["page"]?.try(&.to_i) || 0
+  current_page = env.params.query["page"]?.try(&.to_i) || 0
   posts = Blog::PostQuery.new.all.paginate(current_page, 10)
   # ...
 end
