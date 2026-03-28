@@ -135,6 +135,20 @@ query.previous(post)  # previous entry in the list, or nil
 query.next(post)      # next entry in the list, or nil
 ```
 
+### Filtering
+
+Use `filter` to narrow down entries. It takes a block and is chainable:
+
+```crystal
+Blog::PostQuery.new
+  .filter(&.active)
+  .filter { |post| post.date >= 1.month.ago }
+  .all
+```
+
+Since `filter` accepts any block that returns a `Bool`, you can express any
+condition without being limited to a predefined set of operators.
+
 ### Pagination
 
 The `all` method returns a plain `Array`, so it works with any array-based

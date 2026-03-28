@@ -56,6 +56,11 @@ module Marquery
         @entries
       end
 
+      def filter(&block : MarqueryModel -> Bool) : self
+        @entries = @entries.select(&block)
+        self
+      end
+
       def find(slug : String) : MarqueryModel
         find?(slug) || raise "Entry not found: #{slug}"
       end

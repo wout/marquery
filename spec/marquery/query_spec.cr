@@ -93,6 +93,31 @@ describe "Query" do
     end
   end
 
+  describe "#filter" do
+    it "filters entries with a block" do
+      posts = TestPostQuery.new.filter(&.active).all
+
+      posts.size.should eq(1)
+      posts.first.slug.should eq("first-post")
+    end
+
+    it "is chainable" do
+      posts = TestPostQuery.new
+        .filter { |post| post.date >= Time.local(2026, 3, 24) }
+        .filter { |post| !post.active }
+        .all
+
+      posts.size.should eq(1)
+      posts.first.slug.should eq("third-post")
+    end
+
+    it "returns self" do
+      query = TestPostQuery.new
+
+      query.filter(&.active).should be(query)
+    end
+  end
+
   describe "frontmatter" do
     it "overrides title from frontmatter" do
       post = TestPostQuery.new.find("first-post")
