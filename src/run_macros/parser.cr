@@ -15,16 +15,23 @@ begin
                     raise(%(Unable to parse file content))
 
     entry = {} of String => Bool | Float64 | Int32 | String | Time
-    entry["slug"] = Wordsmith::Inflector.parameterize(filename_match["name"].to_s.gsub("_", "-"))
-    entry["title"] = Wordsmith::Inflector.humanize(filename_match["name"].to_s)
+    file = filename_match["name"].to_s
+    entry["slug"] = Wordsmith::Inflector.parameterize(file.gsub("_", "-"))
+    entry["title"] = Wordsmith::Inflector.humanize(file)
     entry["date"] = Time.parse_local(filename_match["date"], "%Y%m%d")
     entry["content"] = content_match["body"].strip
 
     if frontmatter = content_match["frontmatter"]?
       YAML.parse(frontmatter).as_h.each do |k, v|
         entry[k.as_s] =
-          v.as_bool? || v.as_i? || v.as_f? || v.as_s? || v.as_time? ||
-            raise %(Unknown frontmatter data type "#{v.class}")
+          case v.raw
+          when Bool    then v.as_bool
+          when Int64   then v.as_i
+          when Float64 then v.as_f
+          when String  then v.as_s
+          when Time    then v.as_time
+          else              raise %(Unknown frontmatter data type "#{v.class}")
+          end
       end
     end
 

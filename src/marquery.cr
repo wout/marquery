@@ -9,7 +9,7 @@ module Marquery
     {%
       entries = run("./run_macros/parser", path)
       unless entries.starts_with?('[')
-        raise "Failed to parse entries: " + entries
+        raise "Failed to parse entries: #{entries.stringify}"
       end
     %}
     {{ entries.stringify }}
