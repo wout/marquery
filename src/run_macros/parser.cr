@@ -14,7 +14,7 @@ begin
     content_match = File.read(filename).match(content_regex) ||
                     raise(%(Unable to parse file content))
 
-    entry = {} of String => Bool | Float64 | Int32 | String | Time
+    entry = {} of String => Array(String) | Bool | Float64 | Int32 | String | Time
     file = filename_match["name"].to_s
     entry["slug"] = Wordsmith::Inflector.parameterize(file.gsub("_", "-"))
     entry["title"] = Wordsmith::Inflector.humanize(file)
@@ -30,6 +30,7 @@ begin
           when Float64 then v.as_f
           when String  then v.as_s
           when Time    then v.as_time
+          when Array   then v.as_a.map(&.as_s)
           else              raise %(Unknown frontmatter data type "#{v.class}")
           end
       end

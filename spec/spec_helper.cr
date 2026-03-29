@@ -3,6 +3,8 @@ require "../src/marquery"
 
 struct TestPost
   include Marquery::Model
+
+  getter tags : Array(String) = [] of String
 end
 
 class TestPostQuery

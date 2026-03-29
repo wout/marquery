@@ -238,6 +238,29 @@ describe "Query" do
       post.description.should be_nil
       post.content.should eq("Just a post without frontmatter.")
     end
+
+    it "reads array values from frontmatter" do
+      post = TestPostQuery.new.find("second-post")
+
+      post.tags.should eq(["crystal", "web"])
+    end
+
+    it "defaults array fields to empty" do
+      post = TestPostQuery.new.find("third-post")
+
+      post.tags.should be_empty
+    end
+  end
+
+  describe "filtering on arrays" do
+    it "filters by tag" do
+      posts = TestPostQuery.new
+        .filter { |post| post.tags.includes?("crystal") }
+        .all
+
+      posts.size.should eq(1)
+      posts.first.slug.should eq("second-post")
+    end
   end
 
   describe "content" do
