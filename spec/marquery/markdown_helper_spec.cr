@@ -7,6 +7,13 @@ describe Marquery::MarkdownHelper do
     page.render("Hello **world**").should contain("<strong>world</strong>")
   end
 
+  it "accepts a model instance" do
+    page = DefaultHelperPage.new
+    post = TestPostQuery.new.first
+
+    page.render(post).should contain("<p>")
+  end
+
   it "accepts a custom renderer" do
     page = CustomHelperPage.new
 

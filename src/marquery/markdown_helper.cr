@@ -3,6 +3,10 @@ module Marquery
     macro included
       macro markdown_renderer(klass)
         MARQUERY_RENDERER = \{{klass}}
+
+        private def markdown(entry : Marquery::Model)
+          markdown(entry.to_html)
+        end
       end
 
       macro finished

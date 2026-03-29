@@ -52,6 +52,10 @@ class DefaultHelperPage
   def render(content : String) : String
     markdown(content)
   end
+
+  def render(model : Marquery::Model)
+    markdown(model)
+  end
 end
 
 class CustomHelperPage
