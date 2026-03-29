@@ -214,7 +214,7 @@ describe "Query" do
         .all
 
       posts.size.should eq(2)
-      posts.none? { |p| p.slug == "first-post" }.should be_true
+      posts.none?(&.slug.==("first-post")).should be_true
     end
   end
 
@@ -255,7 +255,7 @@ describe "Query" do
   describe "filtering on arrays" do
     it "filters by tag" do
       posts = TestPostQuery.new
-        .filter { |post| post.tags.includes?("crystal") }
+        .filter(&.tags.includes?("crystal"))
         .all
 
       posts.size.should eq(1)
