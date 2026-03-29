@@ -159,6 +159,7 @@ naturally:
 Blog::PostQuery.new
   .filter(&.active?)
   .filter { |post| post.date >= 1.month.ago }
+  .filter(&.tags.includes?("crystal"))
   .sort_by(&.title)
   .all
 ```
