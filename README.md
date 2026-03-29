@@ -26,11 +26,11 @@ require "marquery"
 
 ### Setting up a query
 
-Create a query class and include `Marquery`:
+Create a query class and include `Marquery::Query`:
 
 ```crystal
 class Blog::PostQuery
-  include Marquery
+  include Marquery::Query
 end
 ```
 
@@ -75,7 +75,7 @@ struct Blog::Post
 end
 
 class Blog::PostQuery
-  include Marquery
+  include Marquery::Query
 
   model Blog::Post
 end
@@ -102,7 +102,7 @@ change the field or direction:
 
 ```crystal
 class Blog::PostQuery
-  include Marquery
+  include Marquery::Query
 
   order_by date, Marquery::Order::ASC
 end
@@ -112,7 +112,7 @@ Or sort by a different field:
 
 ```crystal
 class Blog::PostQuery
-  include Marquery
+  include Marquery::Query
 
   order_by title
 end
