@@ -1,5 +1,5 @@
 module Marquery
-  struct Entity
+  struct Entry
     include Marquery::Model
   end
 end

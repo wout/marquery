@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Compile-time markdown file parsing with optional YAML frontmatter
 - `Marquery::Model` mixin with base fields (slug, title, description, content, date, active)
-- `Marquery::Entity` as default model
+- `Marquery::Entry` as default model
 - Query interface with `all`, `find`, `find?`, `filter`, `previous`, `next`
 - Configurable sort order via `order_by` macro
 - Custom model support via `model` macro

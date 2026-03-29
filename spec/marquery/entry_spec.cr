@@ -1,10 +1,10 @@
 require "../spec_helper"
 
-describe Marquery::Entity do
+describe Marquery::Entry do
   it "includes Marquery::Model" do
     query = DefaultModelQuery.new
 
-    query.all.first.should be_a(Marquery::Entity)
+    query.all.first.should be_a(Marquery::Entry)
   end
 
   it "has all base fields" do

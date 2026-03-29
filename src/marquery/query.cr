@@ -19,7 +19,7 @@ module Marquery
 
       macro finished
         \{% unless @type.has_constant?("MarqueryModel") %}
-          alias MarqueryModel = ::Marquery::Entity
+          alias MarqueryModel = ::Marquery::Entry
         \{% end %}
 
         \{% unless @type.has_constant?("MARQUERY_ORDER") %}

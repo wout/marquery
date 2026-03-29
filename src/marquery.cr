@@ -5,7 +5,7 @@ require "./marquery/markdown_to_html"
 require "./marquery/renderer"
 require "./marquery/markdown_helper"
 require "./marquery/model"
-require "./marquery/entity"
+require "./marquery/entry"
 require "./marquery/query"
 
 module Marquery

@@ -88,7 +88,7 @@ and `Array(String)`.
 
 ### Custom models
 
-By default, entries are deserialized into `Marquery::Entity`. To use a custom
+By default, entries are deserialized into `Marquery::Entry`. To use a custom
 model, define a struct that includes `Marquery::Model` and declare it in the
 query:
 
