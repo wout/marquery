@@ -97,8 +97,8 @@ frontmatter.
 
 ### Sort order
 
-Entries are sorted by `date` in descending order by default. Use `order_by` to
-change the field or direction:
+Entries are sorted by `date` in descending order by default. Use the `order_by`
+macro to change the field or direction:
 
 ```crystal
 class Blog::PostQuery
@@ -131,8 +131,8 @@ post.to_html # => "<p>The body of the post goes here.</p>\n"
 
 ### Markdown in pages and components
 
-Include `Marquery::MarkdownHelper` in pages or components to get a convenient
-`markdown` method that renders markdown strings to HTML:
+Include `Marquery::MarkdownHelper` in pages or components of your app to get a
+convenient `markdown` method that renders markdown strings to HTML:
 
 ```crystal
 class Blog::ShowPage
@@ -140,7 +140,7 @@ class Blog::ShowPage
 
   def content
     div do
-      markdown post.content
+      markdown some_markdown
     end
   end
 end
@@ -148,9 +148,9 @@ end
 
 ### Custom renderer
 
-Both `to_html` on models and `markdown` in pages use `Marquery::Renderer` (Cmark
-GFM) by default. To use a different markdown renderer, create a struct that
-includes `Marquery::MarkdownToHtml`:
+Both the `to_html` method on models and the `markdown` method in pages use
+`Marquery::Renderer` (Cmark GFM) by default. To use a different markdown
+renderer, create a struct that includes `Marquery::MarkdownToHtml`:
 
 ```crystal
 struct MyRenderer
@@ -172,7 +172,7 @@ struct Blog::Post
 end
 ```
 
-Or on pages and components with `markdown_renderer`:
+Or on pages and components of your app with `markdown_renderer`:
 
 ```crystal
 class Blog::ShowPage
@@ -184,20 +184,67 @@ end
 
 ### Querying
 
+Initialize a query object:
+
 ```crystal
 query = Blog::PostQuery.new
-
-# Get all entries
-query.all
-
-# Find by slug (slugs are always hyphenated)
-query.find("first-post")   # raises if not found
-query.find?("first-post")  # returns nil if not found
-
-# Navigate between entries
-query.previous(post)  # previous entry in the list, or nil
-query.next(post)      # next entry in the list, or nil
 ```
+
+Get all entries:
+
+```crystal
+posts = query.all
+```
+
+Get the first entry:
+
+```crystal
+post = query.first   # raises if not found
+post = query.first?  # returns nil if not found
+```
+
+Get the last entry:
+
+```crystal
+post = query.last   # raises if not found
+post = query.last?  # returns nil if not found
+```
+
+Find by slug:
+
+```crystal
+post = query.find("first-post")   # raises if not found
+post = query.find?("first-post")  # returns nil if not found
+
+# => returns a `Marquery::Model` instance of `data/blog_post/20260101_first_post.md`
+```
+
+Navigate between entries:
+
+```crystal
+prev_post = query.previous(post)  # previous entry in the list, or nil
+next_post = query.next(post)      # next entry in the list, or nil
+```
+
+Get all entries in randomised order:
+
+```crystal
+posts = query.shuffle.all
+```
+
+Get all entries in reversed order:
+
+```crystal
+posts = query.reverse.all
+```
+
+Get all entries sorted:
+
+```crystal
+posts = query.sort_by(&.title).all
+```
+
+All collection operations can be chained as well:
 
 ### Filtering
 
