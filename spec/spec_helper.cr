@@ -28,3 +28,17 @@ end
 class DefaultModelQuery
   include Marquery
 end
+
+struct CustomRenderer
+  include Marquery::MarkdownToHtml
+
+  def markdown_to_html(content : String) : String
+    "<custom>#{content}</custom>"
+  end
+end
+
+struct CustomRendererPost
+  include Marquery::Model
+
+  to_html CustomRenderer
+end
