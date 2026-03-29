@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Marquery::MarkdownToHtml` module defining the renderer interface
 - `Marquery::Renderer` struct as the default Cmark-based renderer
 - `Marquery::MarkdownHelper` module for convenient `markdown` method in pages and
-  components, with automatic `raw` wrapping in Lucky
+  components, with automatic `raw` wrapping in Lucky and a `Model` overload
 - `to_html` macro on `Marquery::Model` to declare a custom renderer
 - `markdown_renderer` macro on `Marquery::MarkdownHelper` to declare a custom
   renderer
@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Default data directory changed from `data` to `marquery`
 - Query logic moved from `Marquery` to `Marquery::Query` module
+- Renamed `Marquery::Entity` to `Marquery::Entry`
 
 ## [0.1.0] - 2026-03-20
 
