@@ -21,10 +21,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Chainable `reverse`, `shuffle`, and `sort_by` methods on query objects
 - Delegated `first`, `first?`, `last`, and `last?` methods on query objects
 - `Array(String)` support in frontmatter (e.g. for tags)
+- `Marquery::Dir` annotation to configure the data directory globally or per query
 - `cmark` (cr-cmark-gfm) as a dependency
 
 ### Changed
 
+- Default data directory changed from `data` to `marquery`
 - Query logic moved from `Marquery` to `Marquery::Query` module
 
 ## [0.1.0] - 2026-03-20
