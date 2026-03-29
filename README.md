@@ -171,23 +171,6 @@ post = Blog::PostQuery.new.find("first-post")
 post.to_html # => "<p>The body of the post goes here.</p>\n"
 ```
 
-### Markdown in pages and components
-
-Include `Marquery::MarkdownHelper` in pages or components of your app to get a
-convenient `markdown` method that renders markdown strings to HTML:
-
-```crystal
-class Blog::ShowPage
-  include Marquery::MarkdownHelper
-
-  def content
-    div do
-      markdown some_markdown
-    end
-  end
-end
-```
-
 ### Custom renderer
 
 Both the `to_html` method on models and the `markdown` method in pages use
@@ -280,13 +263,11 @@ Get all entries in reversed order:
 posts = query.reverse.all
 ```
 
-Get all entries sorted:
+Get all entries sorted differently:
 
 ```crystal
 posts = query.sort_by(&.title).all
 ```
-
-All collection operations can be chained as well:
 
 ### Filtering
 
@@ -331,6 +312,26 @@ get "/blog" do |env|
   # ...
 end
 ```
+
+### Markdown in pages and components of your app
+
+Include `Marquery::MarkdownHelper` in pages or components of your app to get a
+convenient `markdown` method that renders markdown strings to HTML:
+
+```crystal
+class Blog::ShowPage
+  include Marquery::MarkdownHelper
+
+  def content
+    div do
+      markdown some_markdown
+    end
+  end
+end
+```
+
+This method uses the same markdown renderer as used in `Markquery::Model`
+instances.
 
 ## Contributing
 
