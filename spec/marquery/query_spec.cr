@@ -194,6 +194,30 @@ describe "Query" do
     end
   end
 
+  describe "chaining" do
+    it "chains filter, sort_by, and reverse" do
+      posts = TestPostQuery.new
+        .filter(&.active)
+        .sort_by(&.title)
+        .reverse
+        .all
+
+      posts.size.should eq(2)
+      posts.first.title.should eq("Third post")
+      posts.last.title.should eq("Second post")
+    end
+
+    it "chains shuffle and filter" do
+      posts = TestPostQuery.new
+        .shuffle
+        .filter(&.active)
+        .all
+
+      posts.size.should eq(2)
+      posts.none? { |p| p.slug == "first-post" }.should be_true
+    end
+  end
+
   describe "frontmatter" do
     it "overrides title from frontmatter" do
       post = TestPostQuery.new.find("first-post")
