@@ -330,7 +330,7 @@ class Blog::ShowPage
 end
 ```
 
-This method uses the same markdown renderer as used in `Markquery::Model`
+This method uses the same markdown renderer as used in `Marquery::Model`
 instances.
 
 ## Contributing
