@@ -9,6 +9,9 @@ crystal: ">= 1.16"
 license: MIT
 
 dependencies:
+  cmark:
+    github: amauryt/cr-cmark-gfm
+    branch: master
   wordsmith:
     github: luckyframework/wordsmith
 
