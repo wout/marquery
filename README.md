@@ -126,6 +126,17 @@ struct Blog::Post
 end
 ```
 
+The `source` field containing the original file path is also available if you
+add it to your model:
+
+```crystal
+struct Blog::Post
+  include Marquery::Model
+
+  getter source : String
+end
+```
+
 ### Sort order
 
 Entries are sorted by `date` in descending order by default. Use the `order_by`
