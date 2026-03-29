@@ -19,6 +19,7 @@ begin
     entry["slug"] = Wordsmith::Inflector.parameterize(file.gsub("_", "-"))
     entry["title"] = Wordsmith::Inflector.humanize(file)
     entry["date"] = Time.parse_local(filename_match["date"], "%Y%m%d")
+    entry["source"] = filename
     entry["content"] = content_match["body"].strip
 
     if frontmatter = content_match["frontmatter"]?

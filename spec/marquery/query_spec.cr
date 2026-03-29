@@ -270,4 +270,12 @@ describe "Query" do
       post.content.should contain("\n")
     end
   end
+
+  describe "source" do
+    it "includes the source file path" do
+      post = TestPostQuery.new.find("first-post")
+
+      post.source.should eq("./marquery/test_post/20260320_first_post.md")
+    end
+  end
 end

@@ -4,6 +4,7 @@ require "../src/marquery"
 struct TestPost
   include Marquery::Model
 
+  getter source : String
   getter tags : Array(String) = [] of String
 end
 
