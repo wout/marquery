@@ -275,7 +275,7 @@ Use `filter` to narrow down entries. It takes a block and is chainable:
 
 ```crystal
 Blog::PostQuery.new
-  .filter(&.active)
+  .filter(&.active?)
   .filter { |post| post.date >= 1.month.ago }
   .all
 ```
@@ -324,7 +324,11 @@ class Blog::ShowPage
 
   def content
     div do
-      markdown some_markdown
+      # Accepts a String
+      markdown "**Something**"
+
+      # Or an instance of Marquery::Model
+      markdown post
     end
   end
 end

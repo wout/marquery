@@ -171,7 +171,7 @@ describe "Query" do
 
   describe "#filter" do
     it "filters entries with a block" do
-      posts = TestPostQuery.new.filter(&.active).all
+      posts = TestPostQuery.new.filter(&.active?).all
 
       posts.size.should eq(2)
       posts.map(&.slug).should_not contain("first-post")
@@ -179,7 +179,7 @@ describe "Query" do
 
     it "is chainable" do
       posts = TestPostQuery.new
-        .filter { |post| !post.active }
+        .filter { |post| !post.active? }
         .filter { |post| post.date <= Time.local(2026, 3, 21) }
         .all
 
@@ -190,14 +190,14 @@ describe "Query" do
     it "returns self" do
       query = TestPostQuery.new
 
-      query.filter(&.active).should be(query)
+      query.filter(&.active?).should be(query)
     end
   end
 
   describe "chaining" do
     it "chains filter, sort_by, and reverse" do
       posts = TestPostQuery.new
-        .filter(&.active)
+        .filter(&.active?)
         .sort_by(&.title)
         .reverse
         .all
@@ -210,7 +210,7 @@ describe "Query" do
     it "chains shuffle and filter" do
       posts = TestPostQuery.new
         .shuffle
-        .filter(&.active)
+        .filter(&.active?)
         .all
 
       posts.size.should eq(2)

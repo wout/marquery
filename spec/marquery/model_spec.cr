@@ -8,7 +8,7 @@ describe Marquery::Model do
     post.title.should be_a(String)
     post.content.should be_a(String)
     post.date.should be_a(Time)
-    post.active.should be_a(Bool)
+    post.active?.should be_a(Bool)
   end
 
   it "makes description optional" do
@@ -20,13 +20,13 @@ describe Marquery::Model do
   it "defaults active to true" do
     post = TestPostQuery.new.find("second-post")
 
-    post.active.should eq(true)
+    post.active?.should eq(true)
   end
 
   it "reads active from frontmatter" do
     post = TestPostQuery.new.find("first-post")
 
-    post.active.should eq(false)
+    post.active?.should eq(false)
   end
 
   describe "#to_html" do

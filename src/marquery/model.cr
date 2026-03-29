@@ -8,7 +8,7 @@ module Marquery
       getter description : String?
       getter content : String
       getter date : Time
-      getter active : Bool = true
+      getter? active : Bool = true
 
       macro to_html(renderer = ::Marquery::Renderer)
         MARQUERY_RENDERER = \{{renderer}}
