@@ -97,9 +97,14 @@ struct Blog::Post
 end
 ```
 
-The base fields provided by `Marquery::Model` are `slug` (`String`), `title`
-(`String`), `description` (`String?`), `content` (`String`), `date` (`Time`),
-and `active?` (`Bool`, defaults to `true`).
+The base fields provided by `Marquery::Model` are:
+
+- `slug` (`String`)
+- `title` (`String`)
+- `description` (`String?`)
+- `content` (`String`)
+- `date` (`Time`)
+- `active?` (`Bool`, defaults to `true`).
 
 The original markdown file path is also available if you add it to your model:
 
