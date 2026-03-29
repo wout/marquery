@@ -4,6 +4,11 @@ A compile-time markdown file query engine for Crystal. Parses markdown files
 with optional YAML frontmatter at compile time and provides a query interface
 with pagination-friendly navigation.
 
+> [!Note]
+> The original repository is hosted at
+> [Codeberg](https://codeberg.org/fluck/marquery). The [GitHub
+> repo](https://github.com/flucksite/marquery) is just a mirror.
+
 ## Installation
 
 1. Add the dependency to your `shard.yml`:
