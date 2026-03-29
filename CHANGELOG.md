@@ -12,10 +12,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - HTML rendering via `to_html` on model instances, using Cmark (GFM) by default
 - `Marquery::MarkdownToHtml` module defining the renderer interface
 - `Marquery::Renderer` struct as the default Cmark-based renderer
-- `Marquery::MarkdownHelper` module for convenient `markdown` method in pages and components
+- `Marquery::MarkdownHelper` module for convenient `markdown` method in pages and
+  components, with automatic `raw` wrapping in Lucky
 - `to_html` macro on `Marquery::Model` to declare a custom renderer
-- `markdown_renderer` macro on `Marquery::MarkdownHelper` to declare a custom renderer
+- `markdown_renderer` macro on `Marquery::MarkdownHelper` to declare a custom
+  renderer
+- `Marquery::Query` module extracted from `Marquery` for clearer usage
+- Chainable `reverse`, `shuffle`, and `sort_by` methods on query objects
+- Delegated `first`, `first?`, `last`, and `last?` methods on query objects
+- `Array(String)` support in frontmatter (e.g. for tags)
 - `cmark` (cr-cmark-gfm) as a dependency
+
+### Changed
+
+- Query logic moved from `Marquery` to `Marquery::Query` module
 
 ## [0.1.0] - 2026-03-20
 
