@@ -9,6 +9,8 @@ require "./marquery/entity"
 require "./marquery/query"
 
 module Marquery
+  annotation Dir; end
+
   macro load_entries(path)
     {%
       entries = run("./run_macros/parser", path)

@@ -26,7 +26,19 @@ module Marquery
           order_by date
         \{% end %}
 
-        \{% path = @type.name.gsub(/Query/, "").gsub(/::/, "").underscore %}
+        \{%
+           if anno = @type.annotation(::Marquery::Dir)
+             dir = anno.args[0]
+           elsif anno = ::Marquery.annotation(::Marquery::Dir)
+             dir = anno.args[0]
+           else
+             dir = "marquery"
+           end
+        %}
+        \{%
+           name = @type.name.gsub(/Query/, "").gsub(/::/, "").underscore
+           path = "#{dir.id}/#{name.id}"
+        %}
 
         @entries : Array(MarqueryModel)
         @@entries : Array(MarqueryModel) = sort_entries(

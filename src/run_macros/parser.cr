@@ -7,7 +7,7 @@ begin
   content_regex = /\A(?:-{3}\n(?<frontmatter>.*?)\n-{3}\n)?(?<body>.*)\z/m
 
   path = ARGV[0]? || raise "Missing data path argument"
-  entries = Dir.glob("./data/#{path}/*.md").map do |filename|
+  entries = Dir.glob("./#{path}/*.md").map do |filename|
     filename_match = File.basename(filename).match(date_regex) ||
                      raise(%(Invalid filename: "#{filename}"))
 
