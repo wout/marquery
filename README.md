@@ -173,9 +173,9 @@ post.to_html # => "<p>The body of the post goes here.</p>\n"
 
 ### Custom renderer
 
-Both the `to_html` method on models and the `markdown` method in pages use
-`Marquery::Renderer` (Cmark GFM) by default. To use a different markdown
-renderer, create a struct that includes `Marquery::MarkdownToHtml`:
+The `to_html` method on models uses `Marquery::Renderer` (Cmark GFM) by
+default. To use a different markdown renderer, create a struct that includes
+`Marquery::MarkdownToHtml`:
 
 ```crystal
 struct MyRenderer
