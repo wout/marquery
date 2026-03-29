@@ -58,10 +58,16 @@ title: The very first post
 description: >-
   This is the first post.
 active: true
+tags:
+  - crystal
+  - web
 ---
 
 The body of the post goes here.
 ```
+
+Supported frontmatter types are `Bool`, `Int32`, `Float64`, `String`, `Time`,
+and `Array(String)`.
 
 ### Custom models
 
@@ -93,7 +99,15 @@ end
 | `active`      | `Bool`    | `true`  |
 
 Additional fields can be added to the custom model and populated through
-frontmatter.
+frontmatter:
+
+```crystal
+struct Blog::Post
+  include Marquery::Model
+
+  getter tags : Array(String) = [] of String
+end
+```
 
 ### Sort order
 
