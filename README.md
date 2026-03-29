@@ -1,13 +1,46 @@
 # Marquery
 
-A compile-time markdown file query engine for Crystal. Parses markdown files
-with optional YAML frontmatter at compile time and provides a query interface
-with pagination-friendly navigation.
+A compile-time markdown file query engine for Crystal. Drop your markdown files
+in a directory, define a query class, and get a type-safe, filterable,
+pagination-ready collection baked right into your binary. No database, no
+runtime parsing.
+
+- **Low runtime overhead.** Markdown is parsed at compile time and embedded in
+  the binary.
+- **Frontmatter support.** YAML frontmatter for metadata like title,
+  description, tags, and custom fields.
+- **Chainable queries.** Filter, sort, reverse, shuffle, navigate, and more.
+- **Built-in HTML rendering.** Cmark GFM out of the box, or bring your own
+  renderer.
+- **Framework-friendly.** Works with Lucky, Kemal, or any Crystal app.
 
 > [!Note]
 > The original repository is hosted at
 > [Codeberg](https://codeberg.org/fluck/marquery). The [GitHub
 > repo](https://github.com/flucksite/marquery) is just a mirror.
+
+## Quick start
+
+```crystal
+require "marquery"
+
+class Blog::PostQuery
+  include Marquery::Query
+end
+
+query = Blog::PostQuery.new
+query.filter(&.active?).sort_by(&.title).all
+query.find("my-first-post").to_html
+```
+
+Add your markdown files to `marquery/blog_post/` and you're good to go:
+
+```
+marquery/blog_post/20260320_my_first_post.md
+marquery/blog_post/20260323_another_post.md
+```
+
+That's it.
 
 ## Installation
 
@@ -21,49 +54,7 @@ with pagination-friendly navigation.
 
 2. Run `shards install`
 
-## Usage
-
-Require the shard in your app:
-
-```crystal
-require "marquery"
-```
-
-### Setting up a query
-
-Create a query class and include `Marquery::Query`:
-
-```crystal
-class Blog::PostQuery
-  include Marquery::Query
-end
-```
-
-This will look for markdown files in `marquery/blog_post/*.md`, derived from the
-class name (without the `Query` suffix). For example:
-
-- `Blog::PostQuery` → `marquery/blog_post/*.md`
-- `ItemQuery` → `marquery/item/*.md`
-- `News::ArticleQuery` → `marquery/news_article/*.md`
-
-To change the default data directory, annotate the `Marquery` module:
-
-```crystal
-@[Marquery::Dir("data")]
-module Marquery
-end
-```
-
-Individual query classes can also override the directory:
-
-```crystal
-@[Marquery::Dir("db/content")]
-class Blog::PostQuery
-  include Marquery::Query
-end
-```
-
-### Markdown files
+## Markdown files
 
 Entries are markdown files with a date-prefixed filename:
 
@@ -71,8 +62,9 @@ Entries are markdown files with a date-prefixed filename:
 marquery/blog_post/20260320_first_post.md
 ```
 
-The date (`YYYYMMDD`) and name are extracted from the filename. An optional YAML
-frontmatter block can override the title and add additional fields:
+The date (`YYYYMMDD`) and name are extracted from the filename. The name becomes
+the slug (hyphenated) and title (humanized). An optional YAML frontmatter block
+can override these and add custom fields:
 
 ```markdown
 ---
@@ -88,40 +80,14 @@ tags:
 The body of the post goes here.
 ```
 
-Supported frontmatter types are `Bool`, `Int32`, `Float64`, `String`, `Time`,
-and `Array(String)`.
+> [!NOTE]
+> Supported frontmatter types: `Bool`, `Int32`, `Float64`, `String`, `Time`,
+> and `Array(String)`.
 
-### Custom models
+## Models
 
-By default, entries are deserialized into `Marquery::Entry`. To use a custom
-model, define a struct that includes `Marquery::Model` and declare it in the
-query:
-
-```crystal
-struct Blog::Post
-  include Marquery::Model
-end
-
-class Blog::PostQuery
-  include Marquery::Query
-
-  model Blog::Post
-end
-```
-
-`Marquery::Model` includes `JSON::Serializable` and defines the base fields:
-
-| Field         | Type      | Default |
-| ------------- | --------- | ------- |
-| `slug`        | `String`  |         |
-| `title`       | `String`  |         |
-| `description` | `String?` | `nil`   |
-| `content`     | `String`  |         |
-| `date`        | `Time`    |         |
-| `active`      | `Bool`    | `true`  |
-
-Additional fields can be added to the custom model and populated through
-frontmatter:
+By default, entries are deserialized into `Marquery::Entry`. For custom fields,
+define a struct that includes `Marquery::Model`:
 
 ```crystal
 struct Blog::Post
@@ -131,8 +97,11 @@ struct Blog::Post
 end
 ```
 
-The `source` field containing the original file path is also available if you
-add it to your model:
+The base fields provided by `Marquery::Model` are `slug` (`String`), `title`
+(`String`), `description` (`String?`), `content` (`String`), `date` (`Time`),
+and `active?` (`Bool`, defaults to `true`).
+
+The original markdown file path is also available if you add it to your model:
 
 ```crystal
 struct Blog::Post
@@ -142,10 +111,61 @@ struct Blog::Post
 end
 ```
 
-### Sort order
+## Queries
 
-Entries are sorted by `date` in descending order by default. Use the `order_by`
-macro to change the field or direction:
+Create a query class and include `Marquery::Query`:
+
+```crystal
+class Blog::PostQuery
+  include Marquery::Query
+
+  model Blog::Post
+end
+```
+
+The data directory is derived from the class name (without the `Query` suffix):
+
+- `Blog::PostQuery` -> `marquery/blog_post/*.md`
+- `ItemQuery` -> `marquery/item/*.md`
+- `News::ArticleQuery` -> `marquery/news_article/*.md`
+
+### Querying
+
+```crystal
+query = Blog::PostQuery.new
+
+query.all                     # all entries
+query.first                   # first entry (raises if empty)
+query.first?                  # first entry or nil
+query.last                    # last entry (raises if empty)
+query.last?                   # last entry or nil
+query.find("first-post")      # find by slug (raises if not found)
+query.find?("first-post")     # find by slug or nil
+query.previous(post)          # previous entry or nil
+query.next(post)              # next entry or nil
+```
+
+### Filtering, sorting, and chaining
+
+`filter`, `sort_by`, `reverse`, and `shuffle` all return `self`, so they chain
+naturally:
+
+```crystal
+Blog::PostQuery.new
+  .filter(&.active?)
+  .filter { |post| post.date >= 1.month.ago }
+  .sort_by(&.title)
+  .all
+```
+
+> [!NOTE]
+> Since `filter` is just a thin wrapper around `Array#select`, you can express
+> any condition.
+
+### Default sort order
+
+Entries are sorted by `date` descending by default. Use `order_by` to change
+the default:
 
 ```crystal
 class Blog::PostQuery
@@ -164,129 +184,6 @@ class Blog::PostQuery
   order_by title
 end
 ```
-
-### HTML rendering
-
-Model instances have a `to_html` method that renders the `content` field to HTML
-using [Cmark](https://github.com/amauryt/cr-cmark-gfm) (GitHub Flavored
-Markdown) by default:
-
-```crystal
-post = Blog::PostQuery.new.find("first-post")
-post.to_html # => "<p>The body of the post goes here.</p>\n"
-```
-
-### Custom renderer
-
-The `to_html` method on models uses `Marquery::Renderer` (Cmark GFM) by
-default. To use a different markdown renderer, create a struct that includes
-`Marquery::MarkdownToHtml`:
-
-```crystal
-struct MyRenderer
-  include Marquery::MarkdownToHtml
-
-  def markdown_to_html(content : String) : String
-    MyMarkdownLib.render(content)
-  end
-end
-```
-
-Then declare it on models with `to_html`:
-
-```crystal
-struct Blog::Post
-  include Marquery::Model
-
-  to_html MyRenderer
-end
-```
-
-Or on pages and components of your app with `markdown_renderer`:
-
-```crystal
-class Blog::ShowPage
-  include Marquery::MarkdownHelper
-
-  markdown_renderer MyRenderer
-end
-```
-
-### Querying
-
-Initialize a query object:
-
-```crystal
-query = Blog::PostQuery.new
-```
-
-Get all entries:
-
-```crystal
-posts = query.all
-```
-
-Get the first entry:
-
-```crystal
-post = query.first   # raises if not found
-post = query.first?  # returns nil if not found
-```
-
-Get the last entry:
-
-```crystal
-post = query.last   # raises if not found
-post = query.last?  # returns nil if not found
-```
-
-Find by slug:
-
-```crystal
-post = query.find("first-post")   # raises if not found
-post = query.find?("first-post")  # returns nil if not found
-
-# => returns a `Marquery::Model` instance of `data/blog_post/20260101_first_post.md`
-```
-
-Navigate between entries:
-
-```crystal
-prev_post = query.previous(post)  # previous entry in the list, or nil
-next_post = query.next(post)      # next entry in the list, or nil
-```
-
-Get all entries in randomised order:
-
-```crystal
-posts = query.shuffle.all
-```
-
-Get all entries in reversed order:
-
-```crystal
-posts = query.reverse.all
-```
-
-Get all entries sorted differently:
-
-```crystal
-posts = query.sort_by(&.title).all
-```
-
-### Filtering
-
-Use `filter` to narrow down entries. It takes a block and is chainable:
-
-```crystal
-Blog::PostQuery.new
-  .filter(&.active?)
-  .filter { |post| post.date >= 1.month.ago }
-  .all
-```
-
-Since `filter` accepts any block that returns a `Bool`, you can express any
-condition without being limited to a predefined set of operators.
 
 ### Pagination
 
@@ -318,10 +215,46 @@ get "/blog" do |env|
 end
 ```
 
-### Markdown in pages and components of your app
+## HTML rendering
+
+Model instances have a `to_html` method that renders the `content` field to HTML
+using [Cmark](https://github.com/amauryt/cr-cmark-gfm) (GitHub Flavored
+Markdown) by default:
+
+```crystal
+post = Blog::PostQuery.new.find("first-post")
+post.to_html # => "<p>The body of the post goes here.</p>\n"
+```
+
+### Custom renderer
+
+To use a different markdown renderer, create a struct that includes
+`Marquery::MarkdownToHtml`:
+
+```crystal
+struct MyRenderer
+  include Marquery::MarkdownToHtml
+
+  def markdown_to_html(content : String) : String
+    MyMarkdownLib.render(content)
+  end
+end
+```
+
+Then declare it on your model with `to_html`:
+
+```crystal
+struct Blog::Post
+  include Marquery::Model
+
+  to_html MyRenderer
+end
+```
+
+### Markdown in pages and components
 
 Include `Marquery::MarkdownHelper` in pages or components of your app to get a
-convenient `markdown` method that renders markdown strings to HTML:
+convenient `markdown` method:
 
 ```crystal
 class Blog::ShowPage
@@ -339,8 +272,40 @@ class Blog::ShowPage
 end
 ```
 
-This method uses the same markdown renderer as used in `Marquery::Model`
-instances.
+> [!NOTE]
+> In Lucky apps, the output is automatically wrapped in `raw`.
+
+To use a custom renderer in pages, use the `markdown_renderer` macro:
+
+```crystal
+class Blog::ShowPage
+  include Marquery::MarkdownHelper
+
+  markdown_renderer MyRenderer
+end
+```
+
+## Configuring the data directory
+
+The default data directory is `marquery/`. To change it globally, annotate the
+`Marquery` module:
+
+```crystal
+# e.g. config/marquery.cr
+
+@[Marquery::Dir("data")]
+module Marquery
+end
+```
+
+Individual query classes can override the directory:
+
+```crystal
+@[Marquery::Dir("db/content")]
+class Blog::PostQuery
+  include Marquery::Query
+end
+```
 
 ## Contributing
 
