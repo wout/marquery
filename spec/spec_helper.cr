@@ -6,27 +6,27 @@ struct TestPost
 end
 
 class TestPostQuery
-  include Marquery
+  include Marquery::Query
 
   model TestPost
 end
 
 class TestPostAscQuery
-  include Marquery
+  include Marquery::Query
 
   model TestPost
   order_by date, Marquery::Order::ASC
 end
 
 class TestPostByTitleQuery
-  include Marquery
+  include Marquery::Query
 
   model TestPost
   order_by title
 end
 
 class DefaultModelQuery
-  include Marquery
+  include Marquery::Query
 end
 
 struct CustomRenderer
