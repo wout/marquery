@@ -118,6 +118,70 @@ class Blog::PostQuery
 end
 ```
 
+### HTML rendering
+
+Model instances have a `to_html` method that renders the `content` field to HTML
+using [Cmark](https://github.com/amauryt/cr-cmark-gfm) (GitHub Flavored
+Markdown) by default:
+
+```crystal
+post = Blog::PostQuery.new.find("first-post")
+post.to_html # => "<p>The body of the post goes here.</p>\n"
+```
+
+### Markdown in pages and components
+
+Include `Marquery::MarkdownHelper` in pages or components to get a convenient
+`markdown` method that renders markdown strings to HTML:
+
+```crystal
+class Blog::ShowPage
+  include Marquery::MarkdownHelper
+
+  def content
+    div do
+      markdown post.content
+    end
+  end
+end
+```
+
+### Custom renderer
+
+Both `to_html` on models and `markdown` in pages use `Marquery::Renderer` (Cmark
+GFM) by default. To use a different markdown renderer, create a struct that
+includes `Marquery::MarkdownToHtml`:
+
+```crystal
+struct MyRenderer
+  include Marquery::MarkdownToHtml
+
+  def markdown_to_html(content : String) : String
+    MyMarkdownLib.render(content)
+  end
+end
+```
+
+Then declare it on models with `to_html`:
+
+```crystal
+struct Blog::Post
+  include Marquery::Model
+
+  to_html MyRenderer
+end
+```
+
+Or on pages and components with `markdown_renderer`:
+
+```crystal
+class Blog::ShowPage
+  include Marquery::MarkdownHelper
+
+  markdown_renderer MyRenderer
+end
+```
+
 ### Querying
 
 ```crystal
@@ -154,8 +218,6 @@ condition without being limited to a predefined set of operators.
 The `all` method returns a plain `Array`, so it works with any array-based
 pagination solution.
 
-#### Lucky
-
 [Lucky](https://luckyframework.org) has built-in array pagination with
 `paginate_array`:
 
@@ -167,8 +229,6 @@ class Blog::Index < BrowserAction
   end
 end
 ```
-
-#### Other frameworks
 
 For [Kemal](https://kemalcr.com/) and other frameworks,
 [pager](https://github.com/imdrasil/pager) is a good option:
