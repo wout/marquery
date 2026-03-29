@@ -33,16 +33,33 @@ module Marquery
           Array(MarqueryModel).from_json(::Marquery.load_entries(\{{ path }}))
         )
 
+        delegate first, first?, last, last?, to: @entries
+
         def initialize
-          @entries = @@entries
+          @entries = @@entries.dup
         end
 
         def all : Array(MarqueryModel)
           @entries
         end
 
+        def reverse : self
+          @entries.reverse!
+          self
+        end
+
+        def shuffle(random : Random? = nil) : self
+          @entries.shuffle!(random)
+          self
+        end
+
+        def sort_by(&block : MarqueryModel -> _) : self
+          @entries.sort_by!(&block)
+          self
+        end
+
         def filter(&block : MarqueryModel -> Bool) : self
-          @entries = @entries.select(&block)
+          @entries.select!(&block)
           self
         end
 

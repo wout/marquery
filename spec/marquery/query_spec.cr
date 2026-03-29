@@ -14,6 +14,82 @@ describe "Query" do
     end
   end
 
+  describe "#first" do
+    it "returns the first entry" do
+      TestPostQuery.new.first.slug.should eq("third-post")
+    end
+  end
+
+  describe "#first?" do
+    it "returns the first entry" do
+      TestPostQuery.new.first?.try(&.slug).should eq("third-post")
+    end
+
+    it "returns nil when no entries match" do
+      TestPostQuery.new.filter { false }.first?.should be_nil
+    end
+  end
+
+  describe "#last" do
+    it "returns the last entry" do
+      TestPostQuery.new.last.slug.should eq("first-post")
+    end
+  end
+
+  describe "#last?" do
+    it "returns the last entry" do
+      TestPostQuery.new.last?.try(&.slug).should eq("first-post")
+    end
+
+    it "returns nil when no entries match" do
+      TestPostQuery.new.filter { false }.last?.should be_nil
+    end
+  end
+
+  describe "#shuffle" do
+    it "returns self" do
+      query = TestPostQuery.new
+
+      query.shuffle.should be(query)
+    end
+
+    it "contains all entries" do
+      slugs = TestPostQuery.new.shuffle.all.map(&.slug).sort!
+
+      slugs.should eq(["first-post", "second-post", "third-post"])
+    end
+  end
+
+  describe "#reverse" do
+    it "returns self" do
+      query = TestPostQuery.new
+
+      query.reverse.should be(query)
+    end
+
+    it "reverses the entry order" do
+      posts = TestPostQuery.new.reverse.all
+
+      posts.first.slug.should eq("first-post")
+      posts.last.slug.should eq("third-post")
+    end
+  end
+
+  describe "#sort_by" do
+    it "returns self" do
+      query = TestPostQuery.new
+
+      query.sort_by(&.title).should be(query)
+    end
+
+    it "sorts entries by the given field" do
+      posts = TestPostQuery.new.sort_by(&.title).all
+
+      posts.first.title.should eq("Second post")
+      posts.last.title.should eq("Third post")
+    end
+  end
+
   describe "#find" do
     it "finds an entry by slug" do
       post = TestPostQuery.new.find("first-post")
