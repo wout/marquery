@@ -3,6 +3,7 @@ require "./marquery/version"
 require "./marquery/order"
 require "./marquery/markdown_to_html"
 require "./marquery/renderer"
+require "./marquery/markdown_helper"
 require "./marquery/model"
 require "./marquery/entity"
 

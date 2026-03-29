@@ -42,3 +42,21 @@ struct CustomRendererPost
 
   to_html CustomRenderer
 end
+
+class DefaultHelperPage
+  include Marquery::MarkdownHelper
+
+  def render(content : String) : String
+    markdown(content)
+  end
+end
+
+class CustomHelperPage
+  include Marquery::MarkdownHelper
+
+  markdown_renderer CustomRenderer
+
+  def render(content : String) : String
+    markdown(content)
+  end
+end
