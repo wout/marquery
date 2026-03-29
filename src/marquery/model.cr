@@ -11,7 +11,7 @@ module Marquery
       getter active : Bool = true
 
       macro to_html(renderer = ::Marquery::Renderer)
-        RENDERER = \{{renderer}}
+        MARQUERY_RENDERER = \{{renderer}}
 
         def to_html : String
           \{{renderer}}.new.markdown_to_html(content)
@@ -19,7 +19,7 @@ module Marquery
       end
 
       macro finished
-        \{% unless @type.has_constant?("RENDERER") %}
+        \{% unless @type.has_constant?("MARQUERY_RENDERER") %}
           to_html
         \{% end %}
       end
