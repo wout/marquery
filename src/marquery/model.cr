@@ -9,6 +9,20 @@ module Marquery
       getter content : String
       getter date : Time
       getter active : Bool = true
+
+      macro to_html(renderer = ::Marquery::Renderer)
+        RENDERER = \{{renderer}}
+
+        def to_html : String
+          \{{renderer}}.new.markdown_to_html(content)
+        end
+      end
+
+      macro finished
+        \{% unless @type.has_constant?("RENDERER") %}
+          to_html
+        \{% end %}
+      end
     end
   end
 end
