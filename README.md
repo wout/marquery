@@ -34,19 +34,36 @@ class Blog::PostQuery
 end
 ```
 
-This will look for markdown files in `data/blog_post/*.md`, derived from the
+This will look for markdown files in `marquery/blog_post/*.md`, derived from the
 class name (without the `Query` suffix). For example:
 
-- `Blog::PostQuery` → `data/blog_post/*.md`
-- `ItemQuery` → `data/item/*.md`
-- `News::ArticleQuery` → `data/news_article/*.md`
+- `Blog::PostQuery` → `marquery/blog_post/*.md`
+- `ItemQuery` → `marquery/item/*.md`
+- `News::ArticleQuery` → `marquery/news_article/*.md`
+
+To change the default data directory, annotate the `Marquery` module:
+
+```crystal
+@[Marquery::Dir("data")]
+module Marquery
+end
+```
+
+Individual query classes can also override the directory:
+
+```crystal
+@[Marquery::Dir("db/content")]
+class Blog::PostQuery
+  include Marquery::Query
+end
+```
 
 ### Markdown files
 
 Entries are markdown files with a date-prefixed filename:
 
 ```
-data/blog_post/20260320_first_post.md
+marquery/blog_post/20260320_first_post.md
 ```
 
 The date (`YYYYMMDD`) and name are extracted from the filename. An optional YAML
