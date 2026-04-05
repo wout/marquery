@@ -1,0 +1,16 @@
+on: [push]
+
+jobs:
+  test:
+    runs-on: codeberg-small
+    strategy:
+      matrix:
+        crystal-version: ["1.16", "latest"]
+    container:
+      image: crystallang/crystal:${{ matrix.crystal-version }}
+    steps:
+      - run: git clone --depth 1 --branch ${{ github.ref_name }} ${{ github.server_url }}/${{ github.repository }} .
+
+      - run: shards install
+      - run: crystal spec
+      - run: crystal tool format --check

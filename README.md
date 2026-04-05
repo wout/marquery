@@ -1,5 +1,8 @@
 # Marquery
 
+[![CI](https://codeberg.org/fluck/marquery/actions/workflows/test.yml/badge.svg)](https://codeberg.org/fluck/marquery/actions?workflow=test.yml)
+[![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcodeberg.org%2Fapi%2Fv1%2Frepos%2Ffluck%2Fmarquery%2Ftags&query=%24%5B0%5D.name&label=version)](https://codeberg.org/fluck/marquery/tags)
+
 A compile-time markdown file query engine for Crystal. Drop your markdown files
 in a directory, define a query class, and get a type-safe, filterable,
 pagination-ready collection baked right into your binary. No database, no
