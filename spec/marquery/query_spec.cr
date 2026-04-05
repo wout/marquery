@@ -58,6 +58,12 @@ describe "Query" do
 
       slugs.should eq(["first-post", "second-post", "third-post"])
     end
+
+    it "accepts a custom random generator" do
+      slugs = TestPostQuery.new.shuffle(Random.new(42)).all.map(&.slug)
+
+      slugs.should eq(TestPostQuery.new.shuffle(Random.new(42)).all.map(&.slug))
+    end
   end
 
   describe "#reverse" do

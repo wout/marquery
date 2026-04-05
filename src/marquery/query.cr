@@ -60,7 +60,7 @@ module Marquery
           self
         end
 
-        def shuffle(random : Random? = nil) : self
+        def shuffle(random : Random = Random::DEFAULT) : self
           @entries.shuffle!(random)
           self
         end
