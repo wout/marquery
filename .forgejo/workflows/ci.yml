@@ -11,6 +11,7 @@ jobs:
     steps:
       - run: git clone --depth 1 --branch ${{ github.ref_name }} ${{ github.server_url }}/${{ github.repository }} .
 
+      - run: apt-get update && apt-get install -y --no-install-recommends cmake
       - run: shards install
       - run: crystal spec
       - run: crystal tool format --check
