@@ -153,6 +153,27 @@ query.previous(post)          # previous entry or nil
 query.next(post)              # next entry or nil
 ```
 
+### Error handling
+
+Query methods raise typed exceptions that you can rescue from:
+
+```crystal
+begin
+  Blog::PostQuery.new.find("nonexistent")
+rescue ex : Marquery::EntryNotFound
+  puts ex.message # => "Entry not found: nonexistent"
+end
+```
+
+All library exceptions inherit from `Marquery::Error`, so you can also catch
+them all:
+
+```crystal
+rescue ex : Marquery::Error
+  # ...
+end
+```
+
 ### Filtering, sorting, and chaining
 
 `filter`, `sort_by`, `reverse`, and `shuffle` all return `self`, so they chain
