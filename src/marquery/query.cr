@@ -60,7 +60,7 @@ module Marquery
           self
         end
 
-        def shuffle(random : Random = Random::DEFAULT) : self
+        def shuffle(random : Random = Random.new) : self
           @entries.shuffle!(random)
           self
         end
@@ -76,7 +76,7 @@ module Marquery
         end
 
         def find(slug : String) : MarqueryModel
-          find?(slug) || raise "Entry not found: #{slug}"
+          find?(slug) || raise ::Marquery::EntryNotFound.new(slug)
         end
 
         def find?(slug : String) : MarqueryModel?

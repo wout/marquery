@@ -1,4 +1,5 @@
 require "json"
+require "./marquery/error"
 require "./marquery/version"
 require "./marquery/order"
 require "./marquery/markdown_to_html"
