@@ -245,6 +245,55 @@ get "/blog" do |env|
 end
 ```
 
+## Index pages
+
+Each query can have an index page with metadata for the collection itself
+(e.g. page title, meta description). Create a `_index.md` file in the data
+directory:
+
+```
+marquery/blog_post/_index.md
+marquery/blog_post/_index/og-image.png
+```
+
+```markdown
+---
+title: Blog
+description: Thoughts on Crystal and web development.
+---
+
+Welcome to the blog.
+```
+
+Access it via the query class:
+
+```crystal
+Blog::PostQuery.index.title       # => "Blog"
+Blog::PostQuery.index.description # => "Thoughts on Crystal and web development."
+Blog::PostQuery.index.to_html     # => "<p>Welcome to the blog.</p>\n"
+```
+
+If no `_index.md` exists, the index returns empty defaults.
+
+### Custom index model
+
+For custom fields, create a struct that includes `Marquery::Collection` and
+assign it with the `index` macro:
+
+```crystal
+struct Blog::PostIndex
+  include Marquery::Collection
+
+  getter subtitle : String?
+end
+
+class Blog::PostQuery
+  include Marquery::Query
+
+  index Blog::PostIndex
+end
+```
+
 ## HTML rendering
 
 Model instances have a `to_html` method that renders the `content` field to HTML

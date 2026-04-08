@@ -19,6 +19,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   URL-ready paths
 - `Marquery::AssetHandler` HTTP handler for serving entry assets from
   configured data directories
+- `Marquery::Collection` mixin for index metadata (title, description,
+  content, assets, `to_html`)
+- `Marquery::Index` default struct for collection index pages
+- `Marquery::Renderable` mixin extracted from `Model` for shared content,
+  assets, and rendering logic
+- `index` macro on query classes for custom index models
+- `.index` class method on query classes returning the parsed `_index.md`
+- `.dir` class method on query classes returning the data directory path
 
 ### Fixed
 
