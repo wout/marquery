@@ -28,6 +28,19 @@ class TestPostByTitleQuery
   order_by title
 end
 
+struct TestPostIndex
+  include Marquery::Collection
+
+  getter subtitle : String?
+end
+
+class TestPostCustomIndexQuery
+  include Marquery::Query
+
+  model TestPost
+  index TestPostIndex
+end
+
 class DefaultModelQuery
   include Marquery::Query
 end

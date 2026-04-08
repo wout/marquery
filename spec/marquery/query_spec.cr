@@ -269,6 +269,21 @@ describe "Query" do
     end
   end
 
+  describe ".index" do
+    it "parses _index.md with frontmatter and content" do
+      index = TestPostQuery.index
+
+      index.title.should eq("Test Blog")
+      index.description.should eq("A test blog for specs")
+      index.content.should eq("Welcome to the test blog.")
+      index.to_html.should contain("<p>Welcome to the test blog.</p>")
+    end
+
+    it "supports custom collection models" do
+      TestPostCustomIndexQuery.index.subtitle.should eq("Crystal all the things")
+    end
+  end
+
   describe "content" do
     it "preserves multiline content" do
       post = TestPostQuery.new.find("first-post")

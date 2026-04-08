@@ -5,20 +5,23 @@ require "./marquery/order"
 require "./marquery/markdown_to_html"
 require "./marquery/renderer"
 require "./marquery/markdown_helper"
+require "./marquery/renderable"
 require "./marquery/model"
 require "./marquery/entry"
+require "./marquery/collection"
+require "./marquery/index"
 require "./marquery/query"
 
 module Marquery
   annotation Dir; end
 
-  macro load_entries(path)
+  macro load(path)
     {%
-      entries = run("./run_macros/parser", path)
-      unless entries.starts_with?('[')
-        raise "Failed to parse entries: #{entries.stringify}"
+      data = run("./run_macros/parser", path)
+      unless data.starts_with?('{')
+        raise "Failed to parse data: #{data.stringify}"
       end
     %}
-    {{ entries.stringify }}
+    {{ data.stringify }}
   end
 end

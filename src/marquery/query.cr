@@ -5,6 +5,10 @@ module Marquery
         alias MarqueryModel = \{{klass}}
       end
 
+      macro index(klass)
+        alias MarqueryIndex = \{{klass}}
+      end
+
       macro order_by(field, order = ::Marquery::Order::DESC)
         MARQUERY_ORDER = { \{{field.id.symbolize}}, \{{order}} }
 
@@ -20,6 +24,10 @@ module Marquery
       macro finished
         \{% unless @type.has_constant?("MarqueryModel") %}
           alias MarqueryModel = ::Marquery::Entry
+        \{% end %}
+
+        \{% unless @type.has_constant?("MarqueryIndex") %}
+          alias MarqueryIndex = ::Marquery::Index
         \{% end %}
 
         \{% unless @type.has_constant?("MARQUERY_ORDER") %}
@@ -44,9 +52,17 @@ module Marquery
           \{{ path }}
         end
 
+        @@data : JSON::Any = JSON.parse(::Marquery.load(\{{ path }}))
+
+        @@index : MarqueryIndex = MarqueryIndex.from_json(@@data["index"].to_json)
+
+        def self.index : MarqueryIndex
+          @@index
+        end
+
         @entries : Array(MarqueryModel)
         @@entries : Array(MarqueryModel) = sort_entries(
-          Array(MarqueryModel).from_json(::Marquery.load_entries(\{{ path }}))
+          Array(MarqueryModel).from_json(@@data["entries"].to_json)
         )
 
         delegate first, first?, last, last?, to: @entries
