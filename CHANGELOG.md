@@ -5,28 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - 2026-04-07
+## [0.4.0] - 2026-04-08
 
 ### Added
 
-- `Marquery::Error` base exception class for all library errors
-- `Marquery::EntryNotFound` exception class raised by `find` for rescuable error handling
-- `Marquery::AssetNotFound` exception class raised by `asset` for rescuable error handling
 - Asset support: images and media files alongside markdown entries in matching
   directories (e.g. `20260320_first_post/hero.png`)
-- `assets` getter on model entries returning a hash of filename to path
-- `asset(name)` and `asset?(name)` methods on model entries returning
-  URL-ready paths
+- `Marquery::Renderable` mixin extracted from `Model` for shared content,
+  assets, and rendering logic
+- `assets` getter and `asset(name)`/`asset?(name)` methods on entries and
+  index pages returning URL-ready paths
 - `Marquery::AssetHandler` HTTP handler for serving entry assets from
   configured data directories
 - `Marquery::Collection` mixin for index metadata (title, description,
   content, assets, `to_html`)
 - `Marquery::Index` default struct for collection index pages
-- `Marquery::Renderable` mixin extracted from `Model` for shared content,
-  assets, and rendering logic
 - `index` macro on query classes for custom index models
 - `.index` class method on query classes returning the parsed `_index.md`
 - `.dir` class method on query classes returning the data directory path
+- `Marquery::AssetNotFound` exception class raised by `asset`
+
+## [0.3.0] - 2026-04-07
+
+### Added
+
+- `Marquery::Error` base exception class for all library errors
+- `Marquery::EntryNotFound` exception class raised by `find` for rescuable
+  error handling
 
 ### Fixed
 
