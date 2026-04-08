@@ -315,6 +315,55 @@ class Blog::ShowPage
 end
 ```
 
+## Assets
+
+Place images and media files in a directory matching the markdown filename
+(without the `.md` extension):
+
+```
+marquery/blog_post/20260320_first_post.md
+marquery/blog_post/20260320_first_post/hero.png
+marquery/blog_post/20260320_first_post/diagram.svg
+```
+
+The assets are available on the entry at compile time:
+
+```crystal
+post = Blog::PostQuery.new.find("first-post")
+post.asset("hero.png")  # => "/marquery/blog_post/20260320_first_post/hero.png"
+post.asset?("missing")  # => nil
+post.assets             # => {"hero.png" => "marquery/blog_post/...", ...}
+```
+
+> [!NOTE]
+> Supported file types: `.avif`, `.gif`, `.jpeg`, `.jpg`, `.mp3`, `.mp4`,
+> `.ogg`, `.pdf`, `.png`, `.svg`, `.webm`, `.webp`. Dotfiles are ignored.
+
+### Serving assets
+
+To serve asset files over HTTP, add `Marquery::AssetHandler` to your middleware:
+
+```crystal
+require "marquery/asset_handler"
+
+# Lucky
+class AppServer < Lucky::BaseAppServer
+  def middleware : Array(HTTP::Handler)
+    [
+      # ... other handlers ...
+      Marquery::AssetHandler.new(Blog::PostQuery.dir, News::ArticleQuery.dir),
+      # ...
+    ] of HTTP::Handler
+  end
+end
+
+# Kemal
+add_handler Marquery::AssetHandler.new(Blog::PostQuery.dir)
+```
+
+The handler serves files from the configured directories and falls through
+for anything else.
+
 ## Configuring the data directory
 
 The default data directory is `marquery/`. To change it globally, annotate the
