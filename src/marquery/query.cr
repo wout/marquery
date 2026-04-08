@@ -40,6 +40,10 @@ module Marquery
            path = "#{dir.id}/#{name.id}"
         %}
 
+        def self.dir : String
+          \{{ path }}
+        end
+
         @entries : Array(MarqueryModel)
         @@entries : Array(MarqueryModel) = sort_entries(
           Array(MarqueryModel).from_json(::Marquery.load_entries(\{{ path }}))

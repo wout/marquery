@@ -9,6 +9,15 @@ module Marquery
       getter content : String
       getter date : Time
       getter? active : Bool = true
+      getter assets : Hash(String, String) = {} of String => String
+
+      def asset(name : String) : String
+        "/#{assets[name]? || raise ::Marquery::AssetNotFound.new(name)}"
+      end
+
+      def asset?(name : String) : String?
+        assets[name]?.try(&.prepend("/"))
+      end
 
       macro to_html(renderer = ::Marquery::Renderer)
         MARQUERY_RENDERER = \{{renderer}}

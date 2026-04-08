@@ -6,4 +6,10 @@ module Marquery
       super("Entry not found: #{slug}")
     end
   end
+
+  class AssetNotFound < Error
+    def initialize(name : String)
+      super("Asset not found: #{name}")
+    end
+  end
 end
