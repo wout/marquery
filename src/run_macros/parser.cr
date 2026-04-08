@@ -80,7 +80,8 @@ begin
     entry
   end
 
-  puts({index: index || {} of String => String, entries: entries}.to_json)
+  puts (index || {} of String => String).to_json
+  puts entries.to_json
 rescue ex
   puts ex
 end

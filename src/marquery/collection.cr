@@ -6,6 +6,7 @@ module Marquery
 
       getter title : String = ""
       getter description : String?
+      getter content : String = ""
 
       def initialize
       end

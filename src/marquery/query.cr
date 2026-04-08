@@ -52,9 +52,9 @@ module Marquery
           \{{ path }}
         end
 
-        @@data : JSON::Any = JSON.parse(::Marquery.load(\{{ path }}))
-
-        @@index : MarqueryIndex = MarqueryIndex.from_json(@@data["index"].to_json)
+        @@index : MarqueryIndex = MarqueryIndex.from_json(
+          ::Marquery.load_index(\{{ path }})
+        )
 
         def self.index : MarqueryIndex
           @@index
@@ -62,7 +62,7 @@ module Marquery
 
         @entries : Array(MarqueryModel)
         @@entries : Array(MarqueryModel) = sort_entries(
-          Array(MarqueryModel).from_json(@@data["entries"].to_json)
+          Array(MarqueryModel).from_json(::Marquery.load_entries(\{{ path }}))
         )
 
         delegate first, first?, last, last?, to: @entries

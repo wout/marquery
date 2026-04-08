@@ -14,6 +14,13 @@ describe Marquery::MarkdownHelper do
     page.render(post).should contain("<p>")
   end
 
+  it "accepts a collection instance" do
+    page = DefaultHelperPage.new
+    index = TestPostQuery.index
+
+    page.render(index).should contain("<p>")
+  end
+
   it "accepts a custom renderer" do
     page = CustomHelperPage.new
 

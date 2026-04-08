@@ -1,7 +1,6 @@
 module Marquery
   module Renderable
     macro included
-      getter content : String = ""
       getter assets : Hash(String, String) = {} of String => String
 
       def asset(name : String) : String

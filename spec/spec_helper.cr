@@ -66,8 +66,8 @@ class DefaultHelperPage
     markdown(content)
   end
 
-  def render(model : Marquery::Model)
-    markdown(model)
+  def render(renderable : Marquery::Renderable)
+    markdown(renderable)
   end
 end
 

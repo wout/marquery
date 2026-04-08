@@ -15,13 +15,25 @@ require "./marquery/query"
 module Marquery
   annotation Dir; end
 
-  macro load(path)
+  macro load_index(path)
     {%
-      data = run("./run_macros/parser", path)
-      unless data.starts_with?('{')
-        raise "Failed to parse data: #{data.stringify}"
+      lines = run("./run_macros/parser", path).split("\n")
+      index = lines[0].id
+      unless index.starts_with?('{')
+        raise "Failed to parse index: #{index.stringify}"
       end
     %}
-    {{ data.stringify }}
+    {{ index.stringify }}
+  end
+
+  macro load_entries(path)
+    {%
+      lines = run("./run_macros/parser", path).split("\n")
+      entries = lines[1].id
+      unless entries.starts_with?('[')
+        raise "Failed to parse entries: #{entries.stringify}"
+      end
+    %}
+    {{ entries.stringify }}
   end
 end

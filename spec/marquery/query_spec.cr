@@ -269,6 +269,12 @@ describe "Query" do
     end
   end
 
+  describe ".dir" do
+    it "returns the data directory path" do
+      TestPostQuery.dir.should eq("marquery/test_post")
+    end
+  end
+
   describe ".index" do
     it "parses _index.md with frontmatter and content" do
       index = TestPostQuery.index
