@@ -11,6 +11,7 @@ require "./marquery/entry"
 require "./marquery/collection"
 require "./marquery/index"
 require "./marquery/query"
+require "./marquery/asset_handler"
 
 module Marquery
   annotation Dir; end

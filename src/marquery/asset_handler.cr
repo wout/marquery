@@ -5,7 +5,10 @@ module Marquery
   class AssetHandler
     include HTTP::Handler
 
-    def initialize(*@directories : String)
+    @directories : Array(String)
+
+    def initialize(*directories : String)
+      @directories = directories.to_a
     end
 
     def call(context : HTTP::Server::Context) : Nil
@@ -23,7 +26,7 @@ module Marquery
 
     private def serveable?(request_path : String, expanded : String) : Bool
       @directories.any? { |dir| request_path.starts_with?(dir) } &&
-        expanded.starts_with?(Dir.current) &&
+        expanded.starts_with?(::Dir.current) &&
         File.file?(expanded)
     end
   end
