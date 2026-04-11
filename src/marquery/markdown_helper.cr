@@ -5,7 +5,7 @@ module Marquery
         MARQUERY_RENDERER = \{{klass}}
 
         private def markdown(renderable : Marquery::Renderable)
-          markdown(renderable.to_html)
+          markdown(renderable.content)
         end
       end
 

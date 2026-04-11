@@ -45,6 +45,13 @@ class DefaultModelQuery
   include Marquery::Query
 end
 
+@[Marquery::Assets("marquery/test_post_assets")]
+class TestPostSharedAssetQuery
+  include Marquery::Query
+
+  model TestPost
+end
+
 struct CustomRenderer
   include Marquery::MarkdownToHtml
 

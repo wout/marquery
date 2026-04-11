@@ -435,6 +435,83 @@ class Blog::PostQuery
 end
 ```
 
+## Multi-language content
+
+For multilingual sites, create a query class per language and extract shared
+configuration into a mixin:
+
+```crystal
+module Blog::PostQueryMethods
+  model Blog::Post
+  order_by date
+end
+
+class Blog::Post::EnQuery
+  include Marquery::Query
+  include Blog::PostQueryMethods
+end
+
+class Blog::Post::NlQuery
+  include Marquery::Query
+  include Blog::PostQueryMethods
+end
+```
+
+Each class gets its own directory derived from the class name:
+
+```
+marquery/blog_post_en/20260320_first_post.md
+marquery/blog_post_nl/20260320_eerste_bericht.md
+```
+
+Then select the query based on the current locale:
+
+```crystal
+query = case locale
+        when "nl" then Blog::Post::NlQuery.new
+        else           Blog::Post::EnQuery.new
+        end
+```
+
+To avoid duplicating assets across locales, use the `@[Marquery::Assets]`
+annotation to point to a shared assets directory:
+
+```crystal
+@[Marquery::Assets("marquery/blog_post")]
+class Blog::Post::EnQuery
+  include Marquery::Query
+  include Blog::PostQueryMethods
+end
+
+@[Marquery::Assets("marquery/blog_post")]
+class Blog::Post::NlQuery
+  include Marquery::Query
+  include Blog::PostQueryMethods
+end
+```
+
+Assets are organized by date (matching the entry filename prefix) and an
+optional `_shared` directory for assets common to all entries:
+
+```
+marquery/blog_post/
+├── _shared/logo.svg
+├── 20260320/hero.png
+└── 20260325/diagram.svg
+```
+
+These are merged with any per-entry assets. When names collide, per-entry
+assets take precedence over date-based, which take precedence over `_shared`.
+
+To serve shared assets over HTTP, pass `assets_dir` to the handler:
+
+```crystal
+Marquery::AssetHandler.new(
+  Blog::Post::EnQuery.dir,
+  Blog::Post::EnQuery.assets_dir.not_nil!,
+)
+```
+
 ## Contributing
 
 We use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)

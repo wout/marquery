@@ -32,7 +32,8 @@ end
 def collect_assets(entry : EntryHash, asset_dir : String) : Nil
   return unless Dir.exists?(asset_dir)
 
-  assets = {} of String => String
+  assets = (entry["assets"]?.as?(Hash(String, String))) || {} of String => String
+  count = assets.size
   Dir.children(asset_dir).sort.each do |child|
     next if child.starts_with?('.')
     next unless ASSET_EXTENSIONS.includes?(File.extname(child).downcase)
@@ -40,13 +41,14 @@ def collect_assets(entry : EntryHash, asset_dir : String) : Nil
 
     assets[child] = child_path.lchop("./")
   end
-  entry["assets"] = assets unless assets.empty?
+  entry["assets"] = assets if assets.size > count
 end
 
 begin
   date_regex = /^(?<date>\d{8})_(?<name>[^.]+)/
 
   path = ARGV[0]? || raise "Missing data path argument"
+  assets_path = ARGV[1]?
 
   # Parse index
   index = nil
@@ -68,13 +70,19 @@ begin
 
     entry = EntryHash.new
     file = filename_match["name"].to_s
+    date = filename_match["date"]
     entry["slug"] = Wordsmith::Inflector.parameterize(file.gsub("_", "-"))
     entry["title"] = Wordsmith::Inflector.humanize(file)
-    entry["date"] = Time.parse_local(filename_match["date"], "%Y%m%d")
+    entry["date"] = Time.parse_local(date, "%Y%m%d")
     entry["source"] = filename
     entry["content"] = content_match["body"].strip
 
     parse_frontmatter(entry, content_match)
+
+    if assets_path
+      collect_assets(entry, "./#{assets_path}/_shared")
+      collect_assets(entry, "./#{assets_path}/#{date}")
+    end
     collect_assets(entry, filename.chomp(".md"))
 
     entry

@@ -8,7 +8,7 @@ module Marquery
       end
 
       def asset?(name : String) : String?
-        assets[name]?.try(&.prepend("/"))
+        assets[name]?.try { |path| "/#{path}" }
       end
 
       macro to_html(renderer = ::Marquery::Renderer)

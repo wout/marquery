@@ -47,13 +47,24 @@ module Marquery
            name = @type.name.gsub(/Query/, "").gsub(/::/, "").underscore
            path = "#{dir.id}/#{name.id}"
         %}
+        \{%
+           if anno = @type.annotation(::Marquery::Assets)
+             assets_path = anno.args[0]
+           else
+             assets_path = nil
+           end
+        %}
 
         def self.dir : String
           \{{ path }}
         end
 
+        def self.assets_dir : String?
+          \{{ assets_path }}
+        end
+
         @@index : MarqueryIndex = MarqueryIndex.from_json(
-          ::Marquery.load_index(\{{ path }})
+          ::Marquery.load_index(\{{ path }}, \{{ assets_path }})
         )
 
         def self.index : MarqueryIndex
@@ -62,7 +73,7 @@ module Marquery
 
         @entries : Array(MarqueryModel)
         @@entries : Array(MarqueryModel) = sort_entries(
-          Array(MarqueryModel).from_json(::Marquery.load_entries(\{{ path }}))
+          Array(MarqueryModel).from_json(::Marquery.load_entries(\{{ path }}, \{{ assets_path }}))
         )
 
         delegate first, first?, last, last?, to: @entries

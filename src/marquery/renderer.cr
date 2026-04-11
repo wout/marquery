@@ -6,7 +6,7 @@ module Marquery
 
     def markdown_to_html(content : String) : String
       options = Cmark::Option.flags(ValidateUTF8, Smart, Unsafe)
-      Cmark.gfm_to_html(content, options)
+      Cmark.gfm_to_html(content.strip, options)
     end
   end
 end
