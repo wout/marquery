@@ -5,29 +5,34 @@ module Marquery
   class AssetHandler
     include HTTP::Handler
 
-    @directories : Array(String)
+    @roots : Array(String)
 
     def initialize(*directories : String)
-      @directories = directories.to_a
+      @roots = directories.map do |dir|
+        expanded = File.expand_path(dir)
+        File.exists?(expanded) ? File.realpath(expanded) : expanded
+      end.to_a
     end
 
     def call(context : HTTP::Server::Context) : Nil
-      request_path = context.request.path.lchop("/")
-      expanded = File.expand_path(request_path)
-
-      if serveable?(request_path, expanded)
-        context.response.content_type = MIME.from_filename(request_path, "application/octet-stream")
-        context.response.content_length = File.size(expanded)
-        File.open(expanded) { |file| IO.copy(file, context.response) }
+      if path = serveable_path(context.request.path.lchop("/"))
+        context.response.content_type = MIME.from_filename(path, "application/octet-stream")
+        context.response.content_length = File.size(path)
+        File.open(path) { |file| IO.copy(file, context.response) }
       else
         call_next(context)
       end
     end
 
-    private def serveable?(request_path : String, expanded : String) : Bool
-      @directories.any? { |dir| request_path.starts_with?(dir) } &&
-        expanded.starts_with?(::Dir.current) &&
-        File.file?(expanded)
+    private def serveable_path(request_path : String) : String?
+      return nil if request_path.empty?
+      return nil unless File.file?(request_path)
+
+      real = File.realpath(request_path)
+      contained = @roots.any? do |root|
+        real == root || real.starts_with?(root + File::SEPARATOR)
+      end
+      contained ? real : nil
     end
   end
 end
