@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `Marquery::Data(Index, Entry)` generic struct wrapping the parser output
+- `process_content(raw : String) : String` hook on `Marquery::Renderable` for
+  pre-processing markdown before rendering. The default implementation rewrites
+  `asset:KEY` URI references inside markdown links and images to their resolved
+  paths. Override it to plug in a templating engine such as Crinja or Liquid
 - Spec coverage for `Marquery::AssetHandler`
 
 ### Changed

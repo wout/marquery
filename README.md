@@ -330,6 +330,59 @@ struct Blog::Post
 end
 ```
 
+### Pre-processing content
+
+Marquery passes raw markdown through `process_content` before handing it to
+the renderer. The default implementation rewrites `asset:KEY` URI references
+to their resolved paths, so you can write asset references inline using
+ordinary markdown link and image syntax:
+
+```markdown
+![Hero](asset:hero.jpg)
+
+See the [spec sheet](asset:specs.pdf) for details.
+```
+
+These get rewritten to whatever `asset("hero.jpg")` and `asset("specs.pdf")`
+resolve to. Unknown keys raise `Marquery::AssetNotFound`, matching the
+behavior of the `asset` helper.
+
+#### Plugging in a templating engine
+
+Override `process_content` on your model to do more, such as running the
+content through a templating engine. The hook runs inside the model instance,
+so `self`, frontmatter fields, and `asset(...)` are all available.
+
+For example, with [Crinja](https://github.com/straight-shoota/crinja):
+
+```crystal
+require "crinja"
+
+struct Blog::Post
+  include Marquery::Model
+
+  def process_content(raw : String) : String
+    Crinja.new.from_string(raw).render({"entry" => self})
+  end
+end
+```
+
+Then in your markdown:
+
+```markdown
+---
+title: First post
+---
+
+# {{ entry.title }}
+
+![Hero]({{ entry.asset("hero.jpg") }})
+```
+
+Marquery deliberately stays out of the templating decision. Use Crinja, Liquid,
+ECR (compile-time only), or roll your own. Whatever `process_content` returns
+is what gets passed to the markdown renderer.
+
 ### Markdown in pages and components
 
 Include `Marquery::MarkdownHelper` in pages or components of your app to get a
