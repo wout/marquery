@@ -561,7 +561,7 @@ To serve shared assets over HTTP, pass `assets_dir` to the handler:
 ```crystal
 Marquery::AssetHandler.new(
   Blog::Post::EnQuery.dir,
-  Blog::Post::EnQuery.assets_dir.not_nil!,
+  Blog::Post::EnQuery.assets_dir,
 )
 ```
 

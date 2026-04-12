@@ -59,9 +59,15 @@ module Marquery
           \{{ path }}
         end
 
-        def self.assets_dir : String?
-          \{{ assets_path }}
-        end
+        \{% if assets_path %}
+          def self.assets_dir : String
+            \{{ assets_path }}
+          end
+        \{% else %}
+          def self.assets_dir : Nil
+            nil
+          end
+        \{% end %}
 
         ::Marquery.load(\{{ path }}, \{{ assets_path }})
 
