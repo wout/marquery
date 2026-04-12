@@ -1,4 +1,6 @@
 module Marquery
+  ASSET_URI_REGEX = /asset:([^\s)"'<>]+)/
+
   module Renderable
     macro included
       getter assets : Hash(String, String) = {} of String => String
@@ -11,11 +13,15 @@ module Marquery
         assets[name]?.try { |path| "/#{path}" }
       end
 
+      def process_content(raw : String) : String
+        raw.gsub(::Marquery::ASSET_URI_REGEX) { asset($~[1]) }
+      end
+
       macro to_html(renderer = ::Marquery::Renderer)
         MARQUERY_RENDERER = \{{renderer}}
 
         def to_html : String
-          \{{renderer}}.new.markdown_to_html(content)
+          \{{renderer}}.new.markdown_to_html(process_content(content))
         end
       end
 

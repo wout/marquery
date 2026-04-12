@@ -66,6 +66,14 @@ struct CustomRendererPost
   to_html CustomRenderer
 end
 
+struct PreProcessedPost
+  include Marquery::Model
+
+  def process_content(raw : String) : String
+    raw.gsub("{{title}}", title)
+  end
+end
+
 class DefaultHelperPage
   include Marquery::MarkdownHelper
 

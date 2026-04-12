@@ -54,5 +54,41 @@ describe Marquery::Model do
 
       post.to_html.should eq("<custom>Hello</custom>")
     end
+
+    it "passes content through process_content before rendering" do
+      post = PreProcessedPost.from_json({
+        slug:    "test",
+        title:   "Hello world",
+        content: "# {{title}}",
+        date:    "2026-01-01T00:00:00Z",
+      }.to_json)
+
+      post.to_html.should contain("<h1>Hello world</h1>")
+    end
+
+    it "rewrites asset: URIs to resolved asset paths" do
+      post = TestPost.from_json({
+        slug:    "test",
+        title:   "Test",
+        content: "![Hero](asset:hero.png)",
+        date:    "2026-01-01T00:00:00Z",
+        source:  "n/a",
+        assets:  {"hero.png" => "marquery/test/hero.png"},
+      }.to_json)
+
+      post.to_html.should contain(%(src="/marquery/test/hero.png"))
+    end
+
+    it "raises AssetNotFound for unknown asset: URIs" do
+      post = TestPost.from_json({
+        slug:    "test",
+        title:   "Test",
+        content: "![Missing](asset:nope.png)",
+        date:    "2026-01-01T00:00:00Z",
+        source:  "n/a",
+      }.to_json)
+
+      expect_raises(Marquery::AssetNotFound) { post.to_html }
+    end
   end
 end
