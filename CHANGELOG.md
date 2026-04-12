@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-04-12
+
 ### Added
 
 - `Marquery::Data(Index, Entry)` generic struct wrapping the parser output
@@ -23,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consolidated `Marquery.load_index` and `Marquery.load_entries` macros into a
   single `Marquery.load` macro that runs the parser script once per query class
   (previously twice)
+- `assets_dir` class method on query classes now returns `String` when
+  `@[Marquery::Assets]` is set and `Nil` otherwise, so callers no longer need
+  `.not_nil!` when passing it to `Marquery::AssetHandler`
 
 ### Fixed
 
