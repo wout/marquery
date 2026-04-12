@@ -49,6 +49,7 @@ begin
 
   path = ARGV[0]? || raise "Missing data path argument"
   assets_path = ARGV[1]?
+  assets_path = nil if assets_path.try(&.empty?)
 
   # Parse index
   index = nil
@@ -88,8 +89,10 @@ begin
     entry
   end
 
-  puts (index || {} of String => String).to_json
-  puts entries.to_json
+  puts({
+    index:   index || {} of String => String,
+    entries: entries,
+  }.to_json)
 rescue ex
   puts ex
 end

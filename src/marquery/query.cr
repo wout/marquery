@@ -63,18 +63,9 @@ module Marquery
           \{{ assets_path }}
         end
 
-        @@index : MarqueryIndex = MarqueryIndex.from_json(
-          ::Marquery.load_index(\{{ path }}, \{{ assets_path }})
-        )
-
-        def self.index : MarqueryIndex
-          @@index
-        end
+        ::Marquery.load(\{{ path }}, \{{ assets_path }})
 
         @entries : Array(MarqueryModel)
-        @@entries : Array(MarqueryModel) = sort_entries(
-          Array(MarqueryModel).from_json(::Marquery.load_entries(\{{ path }}, \{{ assets_path }}))
-        )
 
         delegate first, first?, last, last?, to: @entries
 

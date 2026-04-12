@@ -17,33 +17,27 @@ module Marquery
   annotation Dir; end
   annotation Assets; end
 
-  macro load_index(path, assets_path = nil)
-    {%
-      lines = if assets_path
-                run("./run_macros/parser", path, assets_path).split("\n")
-              else
-                run("./run_macros/parser", path).split("\n")
-              end
-      index = lines[0].id
-      unless index.starts_with?('{')
-        raise "Failed to parse index: #{index.stringify}"
-      end
-    %}
-    {{ index.stringify }}
+  struct Data(Index, Entry)
+    include JSON::Serializable
+
+    getter index : Index
+    getter entries : Array(Entry)
   end
 
-  macro load_entries(path, assets_path = nil)
+  macro load(path, assets_path = nil)
     {%
-      lines = if assets_path
-                run("./run_macros/parser", path, assets_path).split("\n")
-              else
-                run("./run_macros/parser", path).split("\n")
-              end
-      entries = lines[1].id
-      unless entries.starts_with?('[')
-        raise "Failed to parse entries: #{entries.stringify}"
+      source = run("./run_macros/parser", path, assets_path || "").chomp.id
+      unless source.starts_with?('{')
+        raise "Failed to parse parser output: #{source.stringify}"
       end
     %}
-    {{ entries.stringify }}
+
+    @@marquery_data = ::Marquery::Data(MarqueryIndex, MarqueryModel)
+      .from_json({{ source.stringify }})
+    @@entries : Array(MarqueryModel) = sort_entries(@@marquery_data.entries)
+
+    def self.index : MarqueryIndex
+      @@marquery_data.index
+    end
   end
 end
