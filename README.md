@@ -347,7 +347,7 @@ These get rewritten to whatever `asset("hero.jpg")` and `asset("specs.pdf")`
 resolve to. Unknown keys raise `Marquery::AssetNotFound`, matching the
 behavior of the `asset` helper.
 
-#### Plugging in a templating engine
+### Plugging in a templating engine
 
 Override `process_content` on your model to do more, such as running the
 content through a templating engine. The hook runs inside the model instance,
