@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `Marquery::Data(Index, Entry)` generic struct wrapping the parser output
+- Spec coverage for `Marquery::AssetHandler`
+
+### Changed
+
+- Parser run script now emits a single JSON object (`{"index":..., "entries":...}`)
+  instead of two newline-separated documents
+- Consolidated `Marquery.load_index` and `Marquery.load_entries` macros into a
+  single `Marquery.load` macro that runs the parser script once per query class
+  (previously twice)
+
+### Fixed
+
+- `Marquery::AssetHandler` no longer relies on a `Dir.current` string-prefix
+  check; allowed roots are resolved via `File.realpath` at initialization and
+  served paths must be contained within them, closing a path-traversal and
+  symlink-escape gap
+- Replaced deprecated `File.real_path` with `File.realpath`
+
 ## [0.4.1] - 2026-04-11
 
 ### Fixed
