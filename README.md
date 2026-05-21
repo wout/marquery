@@ -1,7 +1,7 @@
 # Marquery
 
-[![CI](https://codeberg.org/fluck/marquery/actions/workflows/ci.yml/badge.svg)](https://codeberg.org/fluck/marquery/actions?workflow=ci.yml)
-[![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcodeberg.org%2Fapi%2Fv1%2Frepos%2Ffluck%2Fmarquery%2Ftags&query=%24%5B0%5D.name&label=version)](https://codeberg.org/fluck/marquery/tags)
+[![CI](https://codeberg.org/fluck/marquery.cr/actions/workflows/ci.yml/badge.svg)](https://codeberg.org/fluck/marquery.cr/actions?workflow=ci.yml)
+[![Version](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fcodeberg.org%2Fapi%2Fv1%2Frepos%2Ffluck%2Fmarquery.cr%2Ftags&query=%24%5B0%5D.name&label=version)](https://codeberg.org/fluck/marquery.cr/tags)
 
 A compile-time markdown file query engine for Crystal. Drop your markdown files
 in a directory, define a query class, and get a type-safe, filterable,
@@ -19,8 +19,12 @@ runtime parsing.
 
 > [!Note]
 > The original repository is hosted at
-> [Codeberg](https://codeberg.org/fluck/marquery). The [GitHub
-> repo](https://github.com/flucksite/marquery) is just a mirror.
+> [Codeberg](https://codeberg.org/fluck/marquery.cr). The [GitHub
+> repo](https://github.com/flucksite/marquery.cr) is just a mirror.
+
+> [!Tip]
+> Looking for the Ruby version? See
+> [marquery](https://codeberg.org/fluck/marquery).
 
 ## Quick start
 
@@ -52,7 +56,7 @@ That's it.
    ```yaml
    dependencies:
      marquery:
-       codeberg: fluck/marquery
+       codeberg: fluck/marquery.cr
    ```
 
 2. Run `shards install`
@@ -570,7 +574,7 @@ Marquery::AssetHandler.new(
 We use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
 for our commit messages, so please adhere to that pattern.
 
-1. Fork it (<https://codeberg.org/fluck/marquery/fork>)
+1. Fork it (<https://codeberg.org/fluck/marquery.cr/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'feat: new feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
